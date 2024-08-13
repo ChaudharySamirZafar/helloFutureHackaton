@@ -1,0 +1,23 @@
+{
+    "clientRequestId": "issue-first-gov-bond-1",
+    "flowClassName": "com.r3.developers.samples.tokens.workflows.governmentBond.issue.IssueGovernmentBondFlow",
+    "requestBody": {
+        "symbol": "UKGILT5Y",
+        "amount": "5000"
+    }
+}
+
+{
+    "clientRequestId": "list-gov-bond-1",
+    "flowClassName": "com.r3.developers.samples.tokens.workflows.governmentBond.list.ListGovernmentBondTokens",
+    "requestBody": {}
+}
+
+
+// Thoughts about the Government Backend
+- How do we track the issue task?
+-- Can we use the bond id + issue, for example bondOne_issue. This would track the status of the tokenisitation for that.
+- Need to pass a bondID to the issue bond function
+- - Find the bond then carry out the action
+
+
