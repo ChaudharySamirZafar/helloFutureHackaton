@@ -3,10 +3,19 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const cors = require("cors"); // Import the cors package
 
 var bondsRouter = require("./routes/bonds");
 
 var app = express();
+
+// Define the CORS options
+const corsOptions = {
+  credentials: true,
+  origin: ["http://localhost:3001", "http://localhost:80"], // Whitelist the domains you want to allow
+};
+
+app.use(cors(corsOptions)); // Use the cors middleware with your options
 
 app.use(logger("dev"));
 app.use(express.json());

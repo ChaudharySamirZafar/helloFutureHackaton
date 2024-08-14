@@ -11,8 +11,6 @@ router.get("/", function (req, res, next) {
 router.post("/buy", async function (req, res, next) {
   const { buyerName, bondId } = req.body;
 
-  // Find the bond that
-
   // Retrieve information about the two parties
   // Government = Issuer of the Government Bond
   // Buyer = Owner of the Government Bond
@@ -85,7 +83,7 @@ async function getListOfVirtualNodes(buyerName) {
 
 async function issueTokenOnLedger(issuer, owner) {
   const requestBody = {
-    clientRequestId: "issue-10",
+    clientRequestId: uuidv4(),
     flowClassName:
       "com.r3.developers.samples.tokens.workflows.issue.IssueGovernmentBondTokensFlow",
     requestBody: {
@@ -142,7 +140,7 @@ async function getListOfGovernmentBondsForUser(userShortHash) {
       console.error("Error:", error);
     });
 
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  await new Promise((resolve) => setTimeout(resolve, 1500));
 
   const resultOfFlow = await fetch(
     `https://localhost:8888/api/v1/flow/${userShortHash}/${clientRequestId}`,
