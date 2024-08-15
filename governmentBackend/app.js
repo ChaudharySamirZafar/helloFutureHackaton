@@ -12,7 +12,7 @@ var app = express();
 // Define the CORS options
 const corsOptions = {
   credentials: true,
-  origin: ["http://localhost:3001", "http://localhost:80"], // Whitelist the domains you want to allow
+  origin: true,
 };
 
 app.use(cors(corsOptions)); // Use the cors middleware with your options
