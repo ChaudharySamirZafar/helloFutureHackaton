@@ -21,8 +21,11 @@ export default function BondsPage() {
   return (
     <main className="bg-white min-h-screen w-full flex flex-col items-center">
       <Navbar />
+      <h1 className="text-2xl font-bold text-black mt-8">
+        Bonds Currently For Sale
+      </h1>
       {loading && (
-        <div className="text-center">
+        <div className="text-center mt-4">
           <div role="status">
             <svg
               aria-hidden="true"
@@ -46,9 +49,8 @@ export default function BondsPage() {
       )}
       {!loading && (
         <div className="flex flex-col max-w-7xl w-full min-h-full text-black items-center px-16 py-8 gap-4">
-          <h1 className="text-2xl font-bold">Bonds Currently For Sale</h1>
           {bondsAvailableForSale.map((bond: any, index: number) => {
-            return <Bond bond={bond} />;
+            return <Bond bond={bond} setLoading={setLoading} />;
           })}
         </div>
       )}
@@ -56,11 +58,12 @@ export default function BondsPage() {
   );
 }
 
-export function Bond({ bond }: { bond: any }) {
+export function Bond({ bond, setLoading }: { bond: any; setLoading: any }) {
   const router = useRouter();
 
   const onBuyNowClicked = async (e: any) => {
     e.preventDefault();
+    setLoading(true);
 
     await buyBond("Samir", bond.BondID);
     router.push("/myBonds");

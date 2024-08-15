@@ -248,7 +248,7 @@ router.post("/buy", async function (req, res, next) {
     staticListOfBonds[foundBondIndex]
   );
 
-  await new Promise((resolve) => setTimeout(resolve, 1500));
+  await new Promise((resolve) => setTimeout(resolve, 3000));
 
   res.json({ issueTokenResponse });
 });
