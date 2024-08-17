@@ -10,6 +10,8 @@ const staticListOfBonds = [
     FaceValue: 5000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB002",
@@ -20,6 +22,8 @@ const staticListOfBonds = [
     FaceValue: 10000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB003",
@@ -30,6 +34,8 @@ const staticListOfBonds = [
     FaceValue: 20000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB004",
@@ -38,8 +44,11 @@ const staticListOfBonds = [
     MaturityDate: "2027-05-01",
     CouponRate: 1.25,
     FaceValue: 15000,
+    FaceValue: 16000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB005",
@@ -50,6 +59,8 @@ const staticListOfBonds = [
     FaceValue: 1000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB006",
@@ -60,6 +71,8 @@ const staticListOfBonds = [
     FaceValue: 25000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB007",
@@ -70,6 +83,8 @@ const staticListOfBonds = [
     FaceValue: 40000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB008",
@@ -80,6 +95,8 @@ const staticListOfBonds = [
     FaceValue: 50000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB009",
@@ -88,8 +105,11 @@ const staticListOfBonds = [
     MaturityDate: "2027-03-15",
     CouponRate: 1.8,
     FaceValue: 10000,
+    FaceValue: 11000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB010",
@@ -100,6 +120,8 @@ const staticListOfBonds = [
     FaceValue: 75000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB011",
@@ -110,6 +132,8 @@ const staticListOfBonds = [
     FaceValue: 30000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB012",
@@ -120,6 +144,8 @@ const staticListOfBonds = [
     FaceValue: 100000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB013",
@@ -130,6 +156,8 @@ const staticListOfBonds = [
     FaceValue: 15000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB014",
@@ -140,6 +168,8 @@ const staticListOfBonds = [
     FaceValue: 12000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB015",
@@ -150,6 +180,8 @@ const staticListOfBonds = [
     FaceValue: 45000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB016",
@@ -160,6 +192,8 @@ const staticListOfBonds = [
     FaceValue: 90000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB017",
@@ -170,6 +204,8 @@ const staticListOfBonds = [
     FaceValue: 65000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB018",
@@ -180,6 +216,8 @@ const staticListOfBonds = [
     FaceValue: 3000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB019",
@@ -190,6 +228,8 @@ const staticListOfBonds = [
     FaceValue: 70000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
   {
     BondID: "GB020",
@@ -200,11 +240,18 @@ const staticListOfBonds = [
     FaceValue: 35000,
     Currency: "GBP",
     purchased: false,
+    burnt: false,
+    owner: "",
   },
 ];
 
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
-const { v4: uuidv4 } = require("uuid");
+
+var getListOfVirtualNodes = require("./services/common/getListOfVirtualNodes");
+var issueTokenOnLedger = require("./services/buy/issueTokenOnLedger");
+var getListOfGovernmentBondsForUser = require("./services/list/getListOfGovernmentBondsForUser");
+var burnTokenOnLedger = require("./services/burn/burnTokenOnLedger");
+var submitMessage = require("./services/hadera/haderaConsensus");
 
 router.get("/", function (req, res, next) {
   const listOfAvailableBonds = staticListOfBonds.filter((bond) => {
@@ -235,6 +282,7 @@ router.post("/buy", async function (req, res, next) {
   }
 
   staticListOfBonds[foundBondIndex].purchased = true;
+  staticListOfBonds[foundBondIndex].owner = buyerName;
 
   // Retrieve information about the two parties
   // Government = Issuer of the Government Bond
@@ -262,143 +310,84 @@ router.get("/list", async function (req, res, next) {
     buyerHoldingIdentity.shortHash
   );
 
-  const responseJson = JSON.parse(result.flowResult);
+  const listOfOwnedGovernmentBondsOnPrivateLedgerUnformated = JSON.parse(
+    result.flowResult
+  );
 
-  res.json(responseJson);
+  const listOfGovernmentBondsOnPublicLedgerUnformated =
+    staticListOfBonds.filter((bond) => {
+      return bond.purchased && bond.burnt && bond.owner === name;
+    });
+
+  const listOfGovernmentBondsOnPublicLedger =
+    listOfGovernmentBondsOnPublicLedgerUnformated.map((publicBonds) => {
+      return {
+        issuer: "",
+        symbol: publicBonds.Symbol,
+        value: publicBonds.FaceValue,
+        owner: publicBonds.owner,
+        issuerCommonName: publicBonds.Issuer,
+        ownerCommonName: publicBonds.owner,
+        bondId: publicBonds.BondID,
+        maturityDate: publicBonds.MaturityDate,
+        couponRate: publicBonds.CouponRate,
+        currency: "GBP",
+        public: true,
+      };
+    });
+
+  const listOfGovernmentBondsOnPrivateLedger =
+    listOfOwnedGovernmentBondsOnPrivateLedgerUnformated.map((bond) => {
+      return {
+        ...bond,
+        public: false,
+      };
+    });
+
+  res.json([
+    ...listOfGovernmentBondsOnPrivateLedger,
+    ...listOfGovernmentBondsOnPublicLedger,
+  ]);
 });
 
-async function getListOfVirtualNodes(buyerName) {
-  let governmentHoldingIdentity = undefined;
-  let buyerHoldingIdentity = undefined;
+router.post("/burn", async function (req, res, next) {
+  const { ownerName, bondId } = req.body;
 
-  const listOfVirtualNodes = await fetch(
-    "https://localhost:8888/api/v1/virtualnode",
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: "Basic YWRtaW46YWRtaW4=",
-      },
-    }
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      return data.virtualNodes;
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  const { buyerHoldingIdentity } = await getListOfVirtualNodes(ownerName);
 
-  listOfVirtualNodes.map((node) => {
-    if (
-      node.holdingIdentity.x500Name ===
-      "CN=British Government, OU=Test Dept, O=British Government, L=London, C=GB"
-    ) {
-      governmentHoldingIdentity = node.holdingIdentity;
-    }
-    if (node.holdingIdentity.x500Name.includes(`CN=${buyerName}`)) {
-      buyerHoldingIdentity = node.holdingIdentity;
-    }
+  // Find the bond...
+  const foundBondIndex = staticListOfBonds.findIndex((bond) => {
+    return bond.BondID === bondId;
   });
 
-  return {
-    governmentHoldingIdentity,
-    buyerHoldingIdentity,
-  };
-}
+  const bond = staticListOfBonds[foundBondIndex];
 
-async function issueTokenOnLedger(issuer, owner, bond) {
-  const requestBody = {
-    clientRequestId: uuidv4(),
-    flowClassName:
-      "com.r3.developers.samples.tokens.workflows.issue.IssueGovernmentBondTokensFlow",
-    requestBody: {
-      symbol: "UKGILT5Y",
-      amount: bond.FaceValue,
-      owner: owner.x500Name,
-      bondId: bond.BondID,
-      maturityDate: bond.MaturityDate,
-      couponRate: bond.CouponRate,
-      currency: bond.Currency,
-    },
-  };
-
-  const issueTokenResponse = await fetch(
-    `https://localhost:8888/api/v1/flow/${issuer.shortHash}`,
-    {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: "Basic YWRtaW46YWRtaW4=",
-      },
-      body: JSON.stringify(requestBody),
-    }
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      return data;
-    })
-    .catch((error) => {
-      console.error("Error:", error);
+  if (foundBondIndex === -1) {
+    res.status(400).json({
+      status: 400,
+      message: "Unkown Bond ID",
     });
-
-  return issueTokenResponse;
-}
-
-async function getListOfGovernmentBondsForUser(userShortHash) {
-  const clientRequestId = "list-" + uuidv4();
-  const requestBody = {
-    clientRequestId: clientRequestId,
-    flowClassName:
-      "com.r3.developers.samples.tokens.workflows.list.ListGovernmentBondTokens",
-    requestBody: {},
-  };
-
-  await fetch(`https://localhost:8888/api/v1/flow/${userShortHash}`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      Authorization: "Basic YWRtaW46YWRtaW4=",
-    },
-    body: JSON.stringify(requestBody),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      return data;
-    })
-    .catch((error) => {
-      console.error("Error:", error);
+    return;
+  } else if (bond.purchased === false) {
+    res.status(400).json({
+      status: 400,
+      message: "Bond has not been purchased",
     });
-
-  let resultOfFlow = await getResultOfFlow(userShortHash, clientRequestId);
-
-  while (resultOfFlow.flowStatus != "COMPLETED") {
-    resultOfFlow = await getResultOfFlow(userShortHash, clientRequestId);
+    return;
   }
 
-  return resultOfFlow;
-}
+  const burnTokenOnLedgerResponse = await burnTokenOnLedger(
+    buyerHoldingIdentity,
+    bond
+  );
 
-const getResultOfFlow = async (userShortHash, clientRequestId) => {
-  const result = await fetch(
-    `https://localhost:8888/api/v1/flow/${userShortHash}/${clientRequestId}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: "Basic YWRtaW46YWRtaW4=",
-      },
-    }
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      return data;
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  if (burnTokenOnLedgerResponse.flowResult === "BURNT_TOKEN_SUCCESSFULLY") {
+    bond.burnt = true;
+  }
 
-  return result;
-};
+  submitMessage(bond);
+
+  res.json(burnTokenOnLedgerResponse);
+});
 
 module.exports = router;

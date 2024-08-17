@@ -5,8 +5,6 @@ import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const pathName = usePathname();
-  console.log(pathName);
-
   return (
     <div className="flex flex-row justify-center gap-4 max-w-7xl w-full text-black font-semibold py-4 border-b-2">
       <Link

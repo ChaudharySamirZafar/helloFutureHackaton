@@ -4,18 +4,44 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 export default function BondsPage() {
-  const [myBonds, setMyBonds] = useState([]);
+  const [myPrivateBonds, setMyPrivateBonds] = useState([]);
+  const [myPublicBonds, setMyPublicBonds] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const getAllMyBonds = async () => {
+    const allMyBonds = await listAllMyBonds("Samir");
+
+    console.log(allMyBonds);
+
+    const publicBonds = allMyBonds.filter((bond: any) => {
+      return bond?.public ?? false;
+    });
+    const privateBonds = allMyBonds.filter((bond: any) => {
+      return bond?.public === false ?? false;
+    });
+
+    setMyPrivateBonds(privateBonds);
+    setMyPublicBonds(publicBonds);
+  };
+
   useEffect(() => {
-    const getAllMyBonds = async () => {
-      const allMyBonds = await listAllMyBonds("Samir");
-      setMyBonds(allMyBonds);
+    const getBonds = async () => {
+      await getAllMyBonds();
       setLoading(false);
     };
 
-    getAllMyBonds();
+    getBonds();
   }, []);
+
+  const onSwitchToPublicBlockchainClicked = async (bondId: string) => {
+    setLoading(true);
+
+    console.log(bondId);
+    await burnToken("Samir", bondId);
+    await getAllMyBonds();
+
+    setLoading(false);
+  };
 
   return (
     <main className="bg-white min-h-screen w-full flex flex-col items-center">
@@ -47,21 +73,54 @@ export default function BondsPage() {
             </div>
           </div>
         )}
-        {!loading && myBonds.length === 0 && (
-          <>
+        {!loading &&
+          myPrivateBonds.length === 0 &&
+          myPublicBonds.length === 0 && (
             <h1>
               You have no purchased bonds.. please buy one in the marketplace{" "}
               <Link className="text-blue-700 underline" href="/bondsForSale">
                 here
               </Link>
             </h1>
-          </>
-        )}
-        {!loading && myBonds && myBonds.length > 0 && (
-          <div className="flex flex-col">
-            {myBonds?.map((ownedBond: any) => {
+          )}
+        {!loading && myPrivateBonds && myPrivateBonds.length > 0 && (
+          <div className="flex flex-col w-full">
+            <h1 className="font-bold text-lg mb-2">Private blockchain</h1>
+            {myPrivateBonds?.map((ownedBond: any) => {
               return (
-                <div className="flex flex-col border-2 px-4 py-6 rounded-lg text-black">
+                <div
+                  className="flex flex-col border-2 px-4 py-6 rounded-lg text-black mb-4"
+                  key={ownedBond.bondId}
+                >
+                  <h1>Issuer: {ownedBond.issuerCommonName}</h1>
+                  <h1>Owner: {ownedBond.ownerCommonName}</h1>
+                  <h1>Face Value: £{ownedBond.value}</h1>
+                  <h1>CouponRate: {ownedBond.couponRate}%</h1>
+                  <h1>Maturity Date: {ownedBond.maturityDate}</h1>
+                  <h1>Currency: {ownedBond.currency}</h1>
+                  <button
+                    className="border-2 p-1.5 rounded-md hover:cursor-pointer"
+                    type="submit"
+                    onClick={() =>
+                      onSwitchToPublicBlockchainClicked(ownedBond.bondId)
+                    }
+                  >
+                    Switch to Public Blockchain
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+        {!loading && myPublicBonds && myPublicBonds.length > 0 && (
+          <div className="flex flex-col  w-full">
+            <h1 className="font-bold text-lg mb-2">Public blockchain</h1>
+            {myPublicBonds?.map((ownedBond: any) => {
+              return (
+                <div
+                  className="flex flex-col border-2 px-4 py-6 rounded-lg text-black mb-4"
+                  key={ownedBond.bondId}
+                >
                   <h1>Issuer: {ownedBond.issuerCommonName}</h1>
                   <h1>Owner: {ownedBond.ownerCommonName}</h1>
                   <h1>Face Value: £{ownedBond.value}</h1>
@@ -76,6 +135,31 @@ export default function BondsPage() {
       </div>
     </main>
   );
+}
+
+async function burnToken(userName: string, bondId: string) {
+  const requestBody = {
+    ownerName: userName,
+    bondId: bondId,
+  };
+
+  const request = await fetch("http://localhost:4000/bonds/burn", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json", // Added Content-Type header
+    },
+    body: JSON.stringify(requestBody),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Returned Data...");
+      console.log(data);
+      return data;
+    });
+
+  return request;
 }
 
 async function listAllMyBonds(username: string) {

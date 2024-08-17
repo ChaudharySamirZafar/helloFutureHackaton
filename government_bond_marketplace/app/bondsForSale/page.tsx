@@ -50,7 +50,7 @@ export default function BondsPage() {
       {!loading && (
         <div className="flex flex-col max-w-7xl w-full min-h-full text-black items-center px-16 py-8 gap-4">
           {bondsAvailableForSale.map((bond: any, index: number) => {
-            return <Bond bond={bond} setLoading={setLoading} />;
+            return <Bond bond={bond} setLoading={setLoading} key={index} />;
           })}
         </div>
       )}
