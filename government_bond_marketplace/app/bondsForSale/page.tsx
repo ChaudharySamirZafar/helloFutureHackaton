@@ -58,7 +58,7 @@ export default function Page() {
   );
 }
 
-export function Bond({ bond, setLoading }: { bond: any; setLoading: any }) {
+function Bond({ bond, setLoading }: { bond: any; setLoading: any }) {
   const router = useRouter();
 
   const onBuyNowClicked = async (e: any) => {
