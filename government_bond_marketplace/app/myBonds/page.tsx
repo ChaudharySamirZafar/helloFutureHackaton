@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-export default function BondsPage() {
+export default function Page() {
   const [myPrivateBonds, setMyPrivateBonds] = useState([]);
   const [myPublicBonds, setMyPublicBonds] = useState([]);
   const [loading, setLoading] = useState(true);
