@@ -12,7 +12,10 @@ client.setOperator(myAccountId, myPrivateKey);
 async function submitMessage(bond) {
   let sendResponse = await new TopicMessageSubmitTransaction({
     topicId: topicId,
-    message: JSON.stringify(bond),
+    message: JSON.stringify({
+      bond: bond,
+      ownerAddress: "0xBAA8B8B9f7d37a853Ba809B66f32bCb140B22a6a",
+    }),
   }).execute(client);
 
   const getReceipt = await sendResponse.getReceipt(client);

@@ -1,16 +1,21 @@
 const { TopicMessageQuery } = require("@hashgraph/sdk");
-const { ethers } = require("ethers")
-require('dotenv').config()
+const { ethers } = require("ethers");
+require("dotenv").config();
 const client = require("./client");
-const contractAbi = require("./bondContractAbi.json")
+const contractAbi = require("./bondContractAbi.json");
 
-const provider = new ethers.InfuraProvider('sepolia', process.env.INFURA_API_KEY)
-const signer = new ethers.Wallet(process.env.PRIVATE_KEY_ETH, provider)
-const contract = new ethers.Contract(process.env.ETH_ADDRESS, contractAbi.abi)
+const provider = new ethers.InfuraProvider(
+  "sepolia",
+  process.env.INFURA_API_KEY
+);
+const signer = new ethers.Wallet(process.env.PRIVATE_KEY_ETH, provider);
+const contract = new ethers.Contract(process.env.ETH_ADDRESS, contractAbi.abi);
 
 const handleMessage = async (message) => {
   try {
-    const data = JSON.parse(Buffer.from(message.contents, "utf8").toString()) ?? {};
+    const data =
+      JSON.parse(Buffer.from(message.contents, "utf8").toString()) ?? {};
+
     const {
       BondID,
       Issuer,
@@ -21,23 +26,22 @@ const handleMessage = async (message) => {
       Currency,
       purchased,
       burnt,
-      owner
-    } = data;
+      bondNId,
+    } = data.bond;
 
-    await contract.connect(signer).safeMint(owner, BondID)
+    console.log("Minting token onto public blockchain....");
+
+    await contract.connect(signer).safeMint(data.ownerAddress, bondNId);
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
-}
+};
 
 const main = async () => {
   // Create the query
   new TopicMessageQuery()
     .setTopicId(process.env.TOPIC_ID)
-    .subscribe(
-      client,
-      handleMessage
-    );
-}
+    .subscribe(client, handleMessage);
+};
 
-main()
+main();

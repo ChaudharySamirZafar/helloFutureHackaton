@@ -12,6 +12,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 1,
   },
   {
     BondID: "GB002",
@@ -24,6 +25,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 2,
   },
   {
     BondID: "GB003",
@@ -36,6 +38,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 3,
   },
   {
     BondID: "GB004",
@@ -49,6 +52,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 4,
   },
   {
     BondID: "GB005",
@@ -61,6 +65,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 5,
   },
   {
     BondID: "GB006",
@@ -73,6 +78,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 6,
   },
   {
     BondID: "GB007",
@@ -85,6 +91,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 7,
   },
   {
     BondID: "GB008",
@@ -97,6 +104,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 8,
   },
   {
     BondID: "GB009",
@@ -110,6 +118,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 9,
   },
   {
     BondID: "GB010",
@@ -122,6 +131,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 10,
   },
   {
     BondID: "GB011",
@@ -134,6 +144,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 11,
   },
   {
     BondID: "GB012",
@@ -146,6 +157,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 12,
   },
   {
     BondID: "GB013",
@@ -158,6 +170,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 13,
   },
   {
     BondID: "GB014",
@@ -170,6 +183,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 14,
   },
   {
     BondID: "GB015",
@@ -182,6 +196,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 15,
   },
   {
     BondID: "GB016",
@@ -194,6 +209,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 16,
   },
   {
     BondID: "GB017",
@@ -206,6 +222,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 17,
   },
   {
     BondID: "GB018",
@@ -218,6 +235,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 18,
   },
   {
     BondID: "GB019",
@@ -230,6 +248,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 19,
   },
   {
     BondID: "GB020",
@@ -242,6 +261,7 @@ const staticListOfBonds = [
     purchased: false,
     burnt: false,
     owner: "",
+    bondNId: 20,
   },
 ];
 

@@ -20,6 +20,7 @@ async function getListOfVirtualNodes(buyerName) {
       console.error("Error:", error);
     });
 
+  // TO:DO Refactor this..
   listOfVirtualNodes.map((node) => {
     if (
       node.holdingIdentity.x500Name ===
