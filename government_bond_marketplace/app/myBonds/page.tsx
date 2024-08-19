@@ -143,13 +143,16 @@ async function burnToken(userName: string, bondId: string) {
     bondId: bondId,
   };
 
-  const request = await fetch("http://localhost:4000/bonds/burn", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json", // Added Content-Type header
-    },
-    body: JSON.stringify(requestBody),
-  })
+  const request = await fetch(
+    `https://governmentbackend-production.up.railway.app/bonds/burn`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Added Content-Type header
+      },
+      body: JSON.stringify(requestBody),
+    }
+  )
     .then((response) => {
       return response.json();
     })
@@ -164,7 +167,7 @@ async function burnToken(userName: string, bondId: string) {
 
 async function listAllMyBonds(username: string) {
   const request = await fetch(
-    `http://localhost:4000/bonds/list?name=${username}`
+    `https://governmentbackend-production.up.railway.app/bonds/list?name=${username}`
   )
     .then((response) => {
       return response.json();

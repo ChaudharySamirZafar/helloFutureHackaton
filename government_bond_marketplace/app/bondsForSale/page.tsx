@@ -100,13 +100,16 @@ async function buyBond(userName: string, bondId: string) {
     bondId: bondId as string,
   };
 
-  const request = await fetch("http://localhost:4000/bonds/buy", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json", // Added Content-Type header
-    },
-    body: JSON.stringify(requestBody),
-  })
+  const request = await fetch(
+    `https://governmentbackend-production.up.railway.app/bonds/buy`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Added Content-Type header
+      },
+      body: JSON.stringify(requestBody),
+    }
+  )
     .then((response) => {
       return response.json();
     })
@@ -118,7 +121,9 @@ async function buyBond(userName: string, bondId: string) {
 }
 
 async function getAllBonds() {
-  const request = await fetch("http://localhost:4000/bonds")
+  const request = await fetch(
+    `https://governmentbackend-production.up.railway.app/bonds`
+  )
     .then((response) => {
       return response.json();
     })
