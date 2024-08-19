@@ -42,6 +42,8 @@ const main = async () => {
   new TopicMessageQuery()
     .setTopicId(process.env.TOPIC_ID)
     .subscribe(client, handleMessage);
+
+  console.log("Successfully Subscribed to Topic");
 };
 
 main();
