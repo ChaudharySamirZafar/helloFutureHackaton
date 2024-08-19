@@ -330,9 +330,7 @@ router.get("/list", async function (req, res, next) {
     buyerHoldingIdentity.shortHash
   );
 
-  const listOfOwnedGovernmentBondsOnPrivateLedgerUnformated = JSON.parse(
-    result.flowResult
-  );
+  const listOfOwnedGovernmentBondsOnPrivateLedgerUnformated = result;
 
   const listOfGovernmentBondsOnPublicLedgerUnformated =
     staticListOfBonds.filter((bond) => {
@@ -396,18 +394,13 @@ router.post("/burn", async function (req, res, next) {
     return;
   }
 
-  const burnTokenOnLedgerResponse = await burnTokenOnLedger(
-    buyerHoldingIdentity,
-    bond
-  );
-
-  if (burnTokenOnLedgerResponse.flowResult === "BURNT_TOKEN_SUCCESSFULLY") {
-    bond.burnt = true;
-  }
+  await burnTokenOnLedger(buyerHoldingIdentity, bond);
 
   submitMessage(bond);
 
-  res.json(burnTokenOnLedgerResponse);
+  res.status(200).json({
+    message: "Burnt token",
+  });
 });
 
 module.exports = router;

@@ -3,8 +3,7 @@ const { v4: uuidv4 } = require("uuid");
 async function issueTokenOnLedger(issuer, owner, bond) {
   const requestBody = {
     clientRequestId: uuidv4(),
-    flowClassName:
-      "com.r3.developers.samples.tokens.workflows.issue.IssueGovernmentBondTokensFlow",
+    flowClassName: "IssueGovernmentBondTokensFlow",
     requestBody: {
       symbol: `UKGILT5Y-${bond.BondID}`,
       amount: bond.FaceValue,
@@ -17,12 +16,11 @@ async function issueTokenOnLedger(issuer, owner, bond) {
   };
 
   const issueTokenResponse = await fetch(
-    `https://localhost:8888/api/v1/flow/${issuer.shortHash}`,
+    `http://localhost:8080/api/v1/flow/${issuer.shortHash}`,
     {
       method: "POST",
       headers: {
-        Accept: "application/json",
-        Authorization: "Basic YWRtaW46YWRtaW4=",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(requestBody),
     }
