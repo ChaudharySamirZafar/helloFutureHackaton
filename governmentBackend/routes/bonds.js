@@ -284,7 +284,6 @@ router.get("/", function (req, res, next) {
 router.post("/buy", async function (req, res, next) {
   const { buyerName, bondId } = req.body;
 
-  // Find the bond...
   const foundBondIndex = staticListOfBonds.findIndex((bond) => {
     return bond.BondID === bondId;
   });
@@ -304,9 +303,6 @@ router.post("/buy", async function (req, res, next) {
   staticListOfBonds[foundBondIndex].purchased = true;
   staticListOfBonds[foundBondIndex].owner = buyerName;
 
-  // Retrieve information about the two parties
-  // Government = Issuer of the Government Bond
-  // Buyer = Owner of the Government Bond
   const { governmentHoldingIdentity, buyerHoldingIdentity } =
     await getListOfVirtualNodes(buyerName);
 
@@ -316,7 +312,7 @@ router.post("/buy", async function (req, res, next) {
     staticListOfBonds[foundBondIndex]
   );
 
-  await new Promise((resolve) => setTimeout(resolve, 5000));
+  await new Promise((resolve) => setTimeout(resolve, 1500));
 
   res.json({ issueTokenResponse });
 });
@@ -331,6 +327,8 @@ router.get("/list", async function (req, res, next) {
   );
 
   const listOfOwnedGovernmentBondsOnPrivateLedgerUnformated = result;
+
+  console.log(staticListOfBonds);
 
   const listOfGovernmentBondsOnPublicLedgerUnformated =
     staticListOfBonds.filter((bond) => {
@@ -395,6 +393,8 @@ router.post("/burn", async function (req, res, next) {
   }
 
   await burnTokenOnLedger(buyerHoldingIdentity, bond);
+
+  bond.burnt = true;
 
   submitMessage(bond);
 

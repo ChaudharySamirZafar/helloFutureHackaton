@@ -1,4 +1,7 @@
 const { v4: uuidv4 } = require("uuid");
+require("dotenv").config();
+
+const backendUrl = process.env.BACKEND_URL;
 
 async function issueTokenOnLedger(issuer, owner, bond) {
   const requestBody = {
@@ -16,7 +19,7 @@ async function issueTokenOnLedger(issuer, owner, bond) {
   };
 
   const issueTokenResponse = await fetch(
-    `http://localhost:8080/api/v1/flow/${issuer.shortHash}`,
+    `${backendUrl}/api/v1/flow/${issuer.shortHash}`,
     {
       method: "POST",
       headers: {

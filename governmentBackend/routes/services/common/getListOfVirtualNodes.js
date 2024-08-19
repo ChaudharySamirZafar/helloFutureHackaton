@@ -1,35 +1,36 @@
+require("dotenv").config();
+const backendUrl = process.env.BACKEND_URL;
+
 async function getListOfVirtualNodes(buyerName) {
   let governmentHoldingIdentity = undefined;
   let buyerHoldingIdentity = undefined;
 
-  const listOfVirtualNodes = await fetch(
-    "https://localhost:8888/api/v1/virtualnode",
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: "Basic YWRtaW46YWRtaW4=",
-      },
-    }
-  )
+  const url = `${backendUrl}/api/v1/virtualNode`;
+  console.log(url);
+
+  const listOfVirtualNodes = await fetch(url, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
-      return data.virtualNodes;
+      return data;
     })
     .catch((error) => {
       console.error("Error:", error);
     });
 
-  // TO:DO Refactor this..
   listOfVirtualNodes.map((node) => {
     if (
-      node.holdingIdentity.x500Name ===
+      node.x500Name ===
       "CN=British Government, OU=Test Dept, O=British Government, L=London, C=GB"
     ) {
-      governmentHoldingIdentity = node.holdingIdentity;
+      governmentHoldingIdentity = node;
     }
-    if (node.holdingIdentity.x500Name.includes(`CN=${buyerName}`)) {
-      buyerHoldingIdentity = node.holdingIdentity;
+    if (node.x500Name.includes(`CN=${buyerName}`)) {
+      buyerHoldingIdentity = node;
     }
   });
 

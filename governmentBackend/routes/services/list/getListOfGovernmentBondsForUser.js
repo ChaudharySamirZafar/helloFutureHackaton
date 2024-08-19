@@ -1,4 +1,7 @@
 const { v4: uuidv4 } = require("uuid");
+require("dotenv").config();
+
+const backendUrl = process.env.BACKEND_URL;
 
 async function getListOfGovernmentBondsForUser(userShortHash) {
   const clientRequestId = "list-" + uuidv4();
@@ -8,16 +11,13 @@ async function getListOfGovernmentBondsForUser(userShortHash) {
     requestBody: {},
   };
 
-  const result = await fetch(
-    `http://localhost:8080/api/v1/flow/${userShortHash}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    }
-  )
+  const result = await fetch(`${backendUrl}/api/v1/flow/${userShortHash}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestBody),
+  })
     .then((response) => response.json())
     .then((data) => {
       return data;
