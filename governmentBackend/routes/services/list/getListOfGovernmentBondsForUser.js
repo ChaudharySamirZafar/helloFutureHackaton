@@ -26,8 +26,6 @@ async function getListOfGovernmentBondsForUser(userShortHash) {
       console.error("Error:", error);
     });
 
-  console.log(result);
-
   return result;
 }
 

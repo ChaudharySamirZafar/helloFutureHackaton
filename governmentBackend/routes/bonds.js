@@ -328,8 +328,6 @@ router.get("/list", async function (req, res, next) {
 
   const listOfOwnedGovernmentBondsOnPrivateLedgerUnformated = result;
 
-  console.log(staticListOfBonds);
-
   const listOfGovernmentBondsOnPublicLedgerUnformated =
     staticListOfBonds.filter((bond) => {
       return bond.purchased && bond.burnt && bond.owner === name;

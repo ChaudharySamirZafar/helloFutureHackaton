@@ -6,7 +6,6 @@ async function getListOfVirtualNodes(buyerName) {
   let buyerHoldingIdentity = undefined;
 
   const url = `${backendUrl}/api/v1/virtualNode`;
-  console.log(url);
 
   const listOfVirtualNodes = await fetch(url, {
     method: "GET",
