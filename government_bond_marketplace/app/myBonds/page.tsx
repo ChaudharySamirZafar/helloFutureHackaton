@@ -2,6 +2,7 @@
 import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import {backendUrl} from "@/app/backEndUrl";
 
 export default function Page() {
   const [myPrivateBonds, setMyPrivateBonds] = useState([]);
@@ -148,7 +149,7 @@ async function burnToken(userName: string, bondId: string) {
   };
 
   const request = await fetch(
-    `https://governmentbackend-production.up.railway.app/bonds/burn`,
+    `${backendUrl}/bonds/burn`,
     {
       method: "POST",
       headers: {
@@ -171,7 +172,7 @@ async function burnToken(userName: string, bondId: string) {
 
 async function listAllMyBonds(username: string) {
   const request = await fetch(
-    `https://governmentbackend-production.up.railway.app/bonds/list?name=${username}`
+    `${backendUrl}/bonds/list?name=${username}`
   )
     .then((response) => {
       return response.json();

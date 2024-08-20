@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useRouter } from "next/navigation";
+import {backendUrl} from "@/app/backEndUrl";
 
 export default function Page() {
   const [bondsAvailableForSale, setBondsAvailableForSale] = useState([]);
@@ -101,7 +102,7 @@ async function buyBond(userName: string, bondId: string) {
   };
 
   const request = await fetch(
-    `https://governmentbackend-production.up.railway.app/bonds/buy`,
+    `${backendUrl}/bonds/buy`,
     {
       method: "POST",
       headers: {
@@ -122,7 +123,7 @@ async function buyBond(userName: string, bondId: string) {
 
 async function getAllBonds() {
   const request = await fetch(
-    `https://governmentbackend-production.up.railway.app/bonds`
+    `${backendUrl}/bonds`
   )
     .then((response) => {
       return response.json();
