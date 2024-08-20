@@ -42,7 +42,7 @@ public class IssueService {
                         .issuerCommonName(issuer.getCommonName())
                         .ownerCommonName(owner.getCommonName())
                         .bondId(flowRequestBody.getBondId())
-                        .maturityDate(flowRequestBody.getBondId())
+                        .maturityDate(flowRequestBody.getMaturityDate())
                         .couponRate(flowRequestBody.getCouponRate())
                         .currency(flowRequestBody.getCurrency())
                         .build();
