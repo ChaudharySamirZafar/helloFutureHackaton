@@ -115,6 +115,10 @@ export default function Page() {
         {!loading && myPublicBonds && myPublicBonds.length > 0 && (
           <div className="flex flex-col  w-full">
             <h1 className="font-bold text-lg mb-2">Public blockchain</h1>
+            <div className="flex flex-row items-center gap-4">
+              <Link href={"https://hashscan.io/testnet/topic/0.0.4688313?p=1&k=1724105770.564939012"}>Hashscan</Link>
+              <Link href={"https://sepolia.etherscan.io/address/0x9BDAb65777aec188408e2B87978a3fC922B18f29"}>Sepolia Etherscan</Link>
+            </div>
             {myPublicBonds?.map((ownedBond: any) => {
               return (
                 <div
