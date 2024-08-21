@@ -8,3 +8,6 @@ The project does not need to be ran. The contract has been deployed successfully
       1. Topic ID being the topic you want to listen to from the hadera consensus service
 2. Run `npm install` in the terminal
 3. Run `node subscribeTopic` in the terminal, and you will successfully be listening for a message on the topic specified.
+
+## Troubleshooting
+- node `v21.7.3` was used when developing.

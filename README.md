@@ -38,3 +38,11 @@ This partly includes the Hadera consensus service as it sends a message to the t
 using the dummy version (`/ShinyTokenCustom`).
 - Topic Listener is the file that listens to the topic and initiates the solidity contract (`/etherumBlockchain/hadera/subscribeTopic`).
 - Solidity Contract is static & doesn't change as the contract has been deployed. It's code is stored in `/etherumBlockchain/eth`
+
+## Disclaimer
+<code style="color : orange">The `shinny-tokens` project is an R3 Corda application but I couldn't unfortunately get it deployed. So, I have created a dummy application in place of that `ShinyTokenCustom`. I have left in the R3 Corda application that I couldn't deploy as I have implemented all the logic and it can work as a standalone application. </code></br></br>
+Before you run the application locally, here is the recommended order to run the applications in.
+1. `/ShinyTokenCustom`
+2. `/GovernmentBackend`
+3. `/Government_bond_marketplace`
+4. `/etherumBlockchain/hedera`
